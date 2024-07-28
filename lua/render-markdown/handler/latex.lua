@@ -50,7 +50,7 @@ function M.parse(root, buf)
     -- Place signs for the LaTeX lines
     local virt_start_row = info.start_row - #expressions
     for i = 1, #expressions do
-        vim.fn.sign_place(0, 'LatexGroup', 'LatexSign', buf, { lnum = virt_start_row + i, priority = 10 })
+        vim.fn.sign_place(0, 'LatexGroup', 'LatexSign', buf, { lnum = virt_start_row + i + 1, priority = 10 })
     end
 
     ---@type render.md.Mark
