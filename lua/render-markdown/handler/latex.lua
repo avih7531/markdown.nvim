@@ -11,6 +11,9 @@ local cache = {
 ---@class render.md.handler.Latex: render.md.Handler
 local M = {}
 
+-- Define a sign type for LaTeX rendered lines
+vim.fn.sign_define('LatexSign', { text = 'L', texthl = 'WarningMsg' })
+
 ---@param root TSNode
 ---@param buf integer
 ---@return render.md.Mark[]
@@ -43,6 +46,11 @@ function M.parse(root, buf)
     local latex_lines = vim.tbl_map(function(expression)
         return { { expression, latex.highlight } }
     end, expressions)
+
+    -- Place signs for the LaTeX lines
+    for i = 1, #latex_lines do
+        vim.fn.sign_place(0, 'LatexGroup', 'LatexSign', buf, { lnum = info.start_row + i, priority = 10 })
+    end
 
     ---@type render.md.Mark
     local latex_mark = {
