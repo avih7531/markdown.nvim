@@ -11,10 +11,8 @@ local cache = {
 ---@class render.md.handler.Latex: render.md.Handler
 local M = {}
 
--- Define a sign type for numbered lines
-for i = 1, 10 do
-    vim.fn.sign_define('LineNumber' .. i, { text = tostring(i), texthl = 'WarningMsg' })
-end
+-- Define a sign type for LaTeX rendered lines
+vim.fn.sign_define('LatexSign', { text = 'L', texthl = 'WarningMsg' })
 
 ---@param root TSNode
 ---@param buf integer
@@ -52,10 +50,9 @@ function M.parse(root, buf)
     -- Calculate the correct starting row for the virtual text
     local virt_start_row = info.start_row - #latex_lines
 
-    -- Place numbered signs for each line
+    -- Place signs for the LaTeX lines
     for i = 1, #latex_lines do
-        local sign_name = 'LineNumber' .. (i % 10) -- To reuse sign definitions for numbers 1-10
-        vim.fn.sign_place(0, 'LatexGroup', sign_name, buf, { lnum = virt_start_row + i, priority = 10 })
+        vim.fn.sign_place(0, 'LatexGroup', 'LatexSign', buf, { lnum = virt_start_row + i, priority = 10 })
     end
 
     ---@type render.md.Mark
